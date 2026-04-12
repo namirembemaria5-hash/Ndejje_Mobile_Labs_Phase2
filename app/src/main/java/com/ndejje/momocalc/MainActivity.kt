@@ -143,14 +143,3 @@ fun PreviewEmptyInput(){
     HoistedAmountInput("", onAmountChange = {})
 
 }
-@Preview(showBackground = true)
-@Composable
-fun PreviewFilled(){
-    HoistedAmountInput("50000", onAmountChange = {})
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewError(){
-    HoistedAmountInput("alex", onAmountChange = {}, isError = true)
-}
