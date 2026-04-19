@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ndejje.momocalc.R.string.fee_label
 import com.ndejje.momocalc.ui.theme.MoMoCalculatorAppTheme
+import com.ndejje.momocalc.ui.theme.MoMoTopBar
 import com.ndejje.momocalc.ui.theme.MoMoTypography
 
 class MainActivity : ComponentActivity() {
@@ -39,109 +40,114 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
-            MaterialTheme(typography = MoMoTypography) {
+            MoMoCalculatorAppTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    MoMoCalcScreen()
+                    Scaffold(
+                        topBar = { MoMoTopBar() }
+                    ) { innerPadding ->
+                        MoMoCalcScreen(
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
                 }
             }
-
-                }
-            }
-        }
-
-
-@Composable
-fun BrokenInput(){
-    var amount = "0"
-    TextField(
-        value = amount,
-        onValueChange = {amount= it},
-        label = {
-            Text(stringResource(R.string.enter_amount))
-        }
-    )
-}
-@Composable
-fun InternalStateInput(){
-    var amount by remember { mutableStateOf("50000") }
-
-    TextField(
-        value = amount,
-        onValueChange = { amount = it },
-        label = { Text(stringResource(R.string.enter_amount)) }
-    )
-}
-
-@Composable
-fun HoistedAmountInput(
-    amount: String,
-    onAmountChange: (String) -> Unit,
-    isError: Boolean = false,
-    modifier: Modifier = Modifier   // ← new parameter with safe default
-) {
-    Column(modifier = modifier) {        // ← modifier applied to outer Column
-        TextField(
-            value = amount,
-            onValueChange = onAmountChange,
-            isError = isError,
-            modifier = Modifier.fillMaxWidth(),
-            label = { Text(stringResource(R.string.enter_amount)) }
-        )
-        if (isError) {
-            Text(
-                text = stringResource(R.string.error_numbers_only),
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodySmall
-            )
         }
     }
-}
 
-@Composable
-fun MoMoCalcScreen() {
-    var amountInput by remember { mutableStateOf("") }
 
-    val numericAmount = amountInput.toDoubleOrNull()
-    val isError = amountInput.isNotEmpty() && numericAmount == null
-    val fee = (numericAmount ?: 0.0) * 0.03
-    val formattedFee = "UGX %,.0f".format(fee)
+    @Composable
+    fun BrokenInput() {
+        var amount = "0"
+        TextField(
+            value = amount,
+            onValueChange = { amount = it },
+            label = {
+                Text(stringResource(R.string.enter_amount))
+            }
+        )
+    }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(dimensionResource(R.dimen.screen_padding)),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    @Composable
+    fun InternalStateInput() {
+        var amount by remember { mutableStateOf("50000") }
+
+        TextField(
+            value = amount,
+            onValueChange = { amount = it },
+            label = { Text(stringResource(R.string.enter_amount)) }
+        )
+    }
+
+    @Composable
+    fun HoistedAmountInput(
+        amount: String,
+        onAmountChange: (String) -> Unit,
+        isError: Boolean = false,
+        modifier: Modifier = Modifier   // ← new parameter with safe default
     ) {
-        Text(
-            text = stringResource(R.string.app_title),
-            style = MaterialTheme.typography.headlineMedium,
-            textAlign = TextAlign.Center
-        )
-        Spacer(
-            modifier = Modifier.height(
-                dimensionResource(R.dimen.spacing_large)
+        Column(modifier = modifier) {        // ← modifier applied to outer Column
+            TextField(
+                value = amount,
+                onValueChange = onAmountChange,
+                isError = isError,
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(stringResource(R.string.enter_amount)) }
             )
-        )
+            if (isError) {
+                Text(
+                    text = stringResource(R.string.error_numbers_only),
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+        }
+    }
 
-        HoistedAmountInput(
-            amount = amountInput,
-            onAmountChange = { amountInput = it },
-            isError = isError,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(
-            modifier = Modifier.height(
-                dimensionResource(R.dimen.spacing_medium)
+    @Composable
+    fun MoMoCalcScreen(modifier: Modifier = Modifier) {
+        var amountInput by remember { mutableStateOf("") }
+
+        val numericAmount = amountInput.toDoubleOrNull()
+        val isError = amountInput.isNotEmpty() && numericAmount == null
+        val fee = (numericAmount ?: 0.0) * 0.03
+        val formattedFee = "UGX %,.0f".format(fee)
+
+        Column(
+            modifier = modifier             // ← receives innerPadding from Scaffold
+                .fillMaxSize()
+                .padding(dimensionResource(R.dimen.screen_padding)),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = stringResource(R.string.app_title),
+                style = MaterialTheme.typography.headlineMedium,
+                textAlign = TextAlign.Center
             )
-        )
+            Spacer(
+                modifier = Modifier.height(
+                    dimensionResource(R.dimen.spacing_large)
+                )
+            )
 
-        Text(
-            text = stringResource(R.string.fee_label, formattedFee),
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center
-        )
+            HoistedAmountInput(
+                amount = amountInput,
+                onAmountChange = { amountInput = it },
+                isError = isError,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(
+                modifier = Modifier.height(
+                    dimensionResource(R.dimen.spacing_medium)
+                )
+            )
+
+            Text(
+                text = stringResource(R.string.fee_label, formattedFee),
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 
