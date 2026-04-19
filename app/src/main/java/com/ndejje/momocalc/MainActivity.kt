@@ -40,11 +40,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MoMoCalculatorAppTheme {   //// our custom theme
+            MoMoAppTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     Scaffold(
                         topBar = { MoMoTopBar() }
                     ) { innerPadding ->
+                        // This will resolve as long as the function below exists
                         MoMoCalcScreen(
                             modifier = Modifier.padding(innerPadding)
                         )
@@ -53,6 +54,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 
 
     @Composable
