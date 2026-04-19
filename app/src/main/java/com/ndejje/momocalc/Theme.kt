@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.foundation.isSystemInDarkTheme
 val MoMoShapes = Shapes(
     small = RoundedCornerShape(4.dp),
     medium = RoundedCornerShape(12.dp),
@@ -42,12 +43,15 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun MoMoAppTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(), // auto-detect by default
     content: @Composable () -> Unit
 ) {
+    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+
     MaterialTheme(
-        colorScheme = LightColorScheme,
-        typography  = MoMoTypography,   // from Module 5 Typography.kt
-        shapes      = MoMoShapes,        // from Part D below
+        colorScheme = colorScheme,
+        typography  = MoMoTypography,
+        shapes      = MoMoShapes,
         content     = content
     )
 }
