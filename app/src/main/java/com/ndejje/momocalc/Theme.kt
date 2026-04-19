@@ -8,13 +8,25 @@ import com.ndejje.momocalc.ui.theme.MoMoTypography
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
 import androidx.compose.ui.unit.dp
-
+import androidx.compose.material3.darkColorScheme
 val MoMoShapes = Shapes(
     small = RoundedCornerShape(4.dp),
     medium = RoundedCornerShape(12.dp),
     large = RoundedCornerShape(16.dp)
 )
 
+private val DarkColorScheme = darkColorScheme(
+    primary         = BrandGold,        // gold becomes the hero in dark mode
+    onPrimary       = NavyBlueDark,
+    secondary       = NavyBlue,
+    onSecondary     = White,
+    background      = DarkBackground,
+    onBackground    = OnDarkText,
+    surface         = DarkSurface,
+    onSurface       = OnDarkText,
+    error           = ErrorRed,
+    onError         = OnErrorWhite
+)
 private val LightColorScheme = lightColorScheme(
     primary         = NavyBlue,
     onPrimary       = White,
